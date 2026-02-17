@@ -1,6 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './Component/SignUp';
 import Login from './Component/Login';
 import PrivateComponent from './Component/PrivateComponent';
@@ -15,7 +14,7 @@ function App() {
       <Routes>
 
         {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
         {/* Protected Routes */}

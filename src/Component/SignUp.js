@@ -8,12 +8,12 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const auth = localStorage.getItem("user");
-        if (auth) {
-            navigate("/");
-        }
-    }, []);
+  useEffect(() => {
+    const auth = localStorage.getItem("user");
+    if (auth) {
+        navigate("/dashboard");
+    }
+}, [navigate]);
 
 
     const collectData = async () => {
