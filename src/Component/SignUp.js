@@ -30,7 +30,7 @@ const SignUp = () => {
 
         localStorage.setItem("user", JSON.stringify(result));
 
-        navigate('/');
+        navigate('/login');
     }
 
     return (

@@ -38,7 +38,7 @@ const AddProduct = () => {
         result = await result.json();
         console.log(result);
 
-        navigate("/"); // after add go to product list
+        navigate("/product-list"); // after add go to product list
     };
 
     return (

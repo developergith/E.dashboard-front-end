@@ -12,44 +12,43 @@ const Updateproduct = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+
+        const getProductDetails = async () => {
+
+            const token = localStorage.getItem("token");
+
+            let response = await fetch(`http://localhost:5000/product/${params.id}`, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            });
+
+            let result = await response.json();
+
+            setName(result.name);
+            setPrice(result.price);
+            setCategory(result.category);
+            setCompany(result.company);
+        };
+
         getProductDetails();
-    }, []);
 
-    const getProductDetails = async () => {
-
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) return;
-
-        let result = await fetch(`http://localhost:5000/product/${params.id}`, {
-            headers: {
-                authorization: `Bearer ${user.auth}`
-            },
-        });
-
-        result = await result.json();
-
-        setName(result.name);
-        setPrice(result.price);
-        setCategory(result.category);
-        setCompany(result.company);
-    };
+    }, [params.id]);  // ✅ ESLint satisfied
 
     const updateProduct = async () => {
 
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) return;
+        const token = localStorage.getItem("token");
 
-        let result = await fetch(`http://localhost:5000/product/${params.id}`, {
+        await fetch(`http://localhost:5000/product/${params.id}`, {
             method: "PUT",
             body: JSON.stringify({ name, price, category, company }),
             headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ${user.auth}`
+                authorization: `Bearer ${token}`,
             },
         });
 
-        result = await result.json();
-        navigate("/");
+        navigate("/dashboard");
     };
 
     return (
@@ -59,7 +58,6 @@ const Updateproduct = () => {
             <input
                 type='text'
                 placeholder='Enter Product Name'
-                className='inputBox'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
@@ -67,7 +65,6 @@ const Updateproduct = () => {
             <input
                 type='text'
                 placeholder='Enter Product Price'
-                className='inputBox'
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
             />
@@ -75,7 +72,6 @@ const Updateproduct = () => {
             <input
                 type='text'
                 placeholder='Enter Product category'
-                className='inputBox'
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
             />
@@ -83,12 +79,11 @@ const Updateproduct = () => {
             <input
                 type='text'
                 placeholder='Enter Product company'
-                className='inputBox'
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
             />
 
-            <button onClick={updateProduct} className='appbutton'>
+            <button onClick={updateProduct}>
                 Update Product
             </button>
         </div>
@@ -96,3 +91,4 @@ const Updateproduct = () => {
 };
 
 export default Updateproduct;
+
