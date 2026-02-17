@@ -9,16 +9,17 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const auth = localStorage.getItem('user');
+        const auth = localStorage.getItem("user");
         if (auth) {
-            navigate('/');
+            navigate("/");
         }
-    }, [navigate]);
+    }, []);
+
 
     const collectData = async () => {
 
         let result = await fetch("http://localhost:5000/register", {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify({ name, email, password }),
             headers: {
                 'Content-Type': 'application/json'
@@ -27,11 +28,9 @@ const SignUp = () => {
 
         result = await result.json();
 
-        localStorage.setItem("user", JSON.stringify(result.result));
-        localStorage.setItem("token", result.auth);
+        localStorage.setItem("user", JSON.stringify(result));
 
-        navigate('/dashboard');
-
+        navigate('/');
     }
 
     return (

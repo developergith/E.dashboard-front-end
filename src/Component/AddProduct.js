@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
-    const [name, setName] = React.useState("");
-    const [price, setPrice] = React.useState("");
-    const [category, setCategory] = React.useState("");
-    const [company, setCompany] = React.useState("");
-    const [error, setError] = React.useState(false);
-    const AddProduct = async () => {
-        console.log(name, price, category, company);
+
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [company, setCompany] = useState("");
+    const [error, setError] = useState(false);
+
+    const navigate = useNavigate();
+
+    const addProduct = async () => {
+
         if (!name || !price || !category || !company) {
             setError(true);
-            return false;
+            return;
         }
-        console.warn(name, price, category, company);
-        
-        const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) return;
+
         let result = await fetch("http://localhost:5000/add-product", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                
-                authorization: `Bearer ${localStorage.getItem("token")}`
+                authorization: `Bearer ${user.auth}`
             },
             body: JSON.stringify({
                 name,
@@ -31,27 +36,56 @@ const AddProduct = () => {
         });
 
         result = await result.json();
-        console.warn(result);
-    }
+        console.log(result);
+
+        navigate("/"); // after add go to product list
+    };
 
     return (
         <div className='product'>
             <h1>Add Product</h1>
-            <input type='text' placeholder='Enter Product Name' className='inputBox' value={name} onChange={(e) => { setName(e.target.value) }} />
-            {error && !name && <spam className='invalid-input'>Enter Valid Name</spam>}
 
-            <input type='text' placeholder='Enter Product Price' className='inputBox' value={price} onChange={(e) => { setPrice(e.target.value) }} />
-            {error && !price && <spam className='invalid-input'>Enter Valid Price</spam>}
+            <input
+                type='text'
+                placeholder='Enter Product Name'
+                className='inputBox'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+            {error && !name && <span className='invalid-input'>Enter Valid Name</span>}
 
-            <input type='text' placeholder='Enter Product category' className='inputBox' value={category} onChange={(e) => { setCategory(e.target.value) }} />
-            {error && !category && <spam className='invalid-input'>Enter Valid category</spam>}
+            <input
+                type='text'
+                placeholder='Enter Product Price'
+                className='inputBox'
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+            />
+            {error && !price && <span className='invalid-input'>Enter Valid Price</span>}
 
-            <input type='text' placeholder='Enter Product company' className='inputBox' value={company} onChange={(e) => { setCompany(e.target.value) }} />
-            {error && !company && <spam className='invalid-input'>Enter Valid company</spam>}
+            <input
+                type='text'
+                placeholder='Enter Product Category'
+                className='inputBox'
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+            />
+            {error && !category && <span className='invalid-input'>Enter Valid Category</span>}
 
-            <button onClick={AddProduct} className='appbutton'>Add Product</button>
+            <input
+                type='text'
+                placeholder='Enter Product Company'
+                className='inputBox'
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+            />
+            {error && !company && <span className='invalid-input'>Enter Valid Company</span>}
+
+            <button onClick={addProduct} className='appbutton'>
+                Add Product
+            </button>
         </div>
-    )
+    );
 };
 
 export default AddProduct;

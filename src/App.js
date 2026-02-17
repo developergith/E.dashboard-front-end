@@ -14,15 +14,18 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Default route */}
-        <Route path="/" element={<Navigate to="/login" />} />
-
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
         {/* Protected Routes */}
         <Route element={<PrivateComponent />}>
+          <Route path="/" element={
+            <Layout>
+              <ProductList />
+            </Layout>
+          } />
+
           <Route path="/dashboard" element={
             <Layout>
               <ProductList />
@@ -46,6 +49,7 @@ function App() {
     </BrowserRouter>
   );
 }
+
 
 export default App;
 
